@@ -1,0 +1,6 @@
+- benahin login pakai email
+- securitynya (session baru mungkin bisa bikin)
+- log activity
+- ✅ warna gaugenya
+- polling
+- ✅ form validation untuk loginnya (kalau pakai form)
