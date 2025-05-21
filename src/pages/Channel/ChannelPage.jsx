@@ -21,11 +21,6 @@ const ChannelPage = () => {
   const [isValChanging, setIsValChanging] = useState(false);
   const [mode, setMode] = useState(null); // "up" or "down"
 
-  // let fillColor = "";
-  // if (channel <= 33) fillColor = "#52b202";
-  // else if (channel > 33 && channel < 67) fillColor = "#ffb703";
-  // else fillColor = "#e63946";
-
   useEffect(() => {
     const fetchData = async () => {
       if (channelDetail) {
@@ -129,25 +124,6 @@ const ChannelPage = () => {
       </div>
       <div className=" w-screen h-[70vh] flex flex-col items-center justify-center text-center text-2xl">
         <div className="flex flex-col items-center">
-          {/* <Gauge
-            width={200}
-            height={200}
-            value={channel}
-            startAngle={-110}
-            endAngle={110}
-            sx={(theme) => ({
-              [`& .${gaugeClasses.valueText}`]: {
-                fontSize: 40,
-              },
-              [`& .${gaugeClasses.valueArc}`]: {
-                fill: fillColor,
-              },
-              [`& .${gaugeClasses.referenceArc}`]: {
-                fill: theme.palette.text.disabled,
-              },
-            })}
-            text={({ value }) => `${value}%`}
-          /> */}
           <GaugeContainer
             width={200}
             height={150}
