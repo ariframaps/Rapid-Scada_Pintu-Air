@@ -20,7 +20,7 @@ const checkLogin = async () => {
 };
 
 const initialState = {
-  isLoggedIn: await checkLogin(),
+  isLoggedIn: checkLogin(),
 };
 
 const AuthContext = createContext(initialState);
