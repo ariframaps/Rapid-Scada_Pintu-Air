@@ -9,13 +9,11 @@ export default defineConfig({
   server: {
     proxy: {
       "/api": {
-        target: "http://localhost:10008", // arahkan ke Rapid SCADA
+        target: "http://3.25.86.92", // arahkan ke Rapid SCADA
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // hapus '/api' biar path asli dipake
       },
     },
-    allowedHosts: [
-      "e5e7-2001-448a-c020-5e9-844d-1f45-c6e7-872c.ngrok-free.app",
-    ],
+    allowedHosts: ["*"],
   },
 });
