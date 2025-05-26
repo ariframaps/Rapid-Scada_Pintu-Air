@@ -1,31 +1,17 @@
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useReducer, useEffect } from "react";
 import { AuthReducer } from "./reducer/AuthReducer";
 import { sendEmail } from "../helper/SendEmail";
-
-const checkLogin = async () => {
-  try {
-    const res = await fetch("/api/Api/Main/GetCurData?cnlNums=101", {
-      credentials: "include", // penting! biar kirim cookie-nya
-    });
-
-    if (res.status === 200) {
-      return true;
-    } else {
-      return false;
-    }
-  } catch (err) {
-    console.error("Login Error");
-    return false;
-  }
-};
+import { useNavigate } from "react-router-dom";
 
 const initialState = {
-  isLoggedIn: checkLogin(),
+  // isLoggedIn: false,
+  // loading: true,
 };
 
 const AuthContext = createContext(initialState);
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [state, dispatch] = useReducer(AuthReducer, initialState);
 
   async function setLoggedIn(username, password) {
@@ -39,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     const data = await res.json();
     if (data.ok) {
       console.log("Login berhasil");
-      sendEmail();
+      // sendEmail();
     } else {
       throw new Error("Login gagal");
     }
@@ -49,12 +35,16 @@ export const AuthProvider = ({ children }) => {
       alert("Sesi anda telah habis, silahkan login kembali");
     }, 1800000);
 
-    dispatch({
-      type: "LOGGED_IN",
-      payload: {
-        isLoggedIn: true,
-      },
-    });
+    navigate("/");
+    return true;
+
+    // dispatch({
+    //   type: "LOGGED_IN",
+    //   payload: {
+    //     isLoggedIn: true,
+    //     loading: state.loading,
+    //   },
+    // });
   }
 
   async function setLoggedOut() {
@@ -72,16 +62,19 @@ export const AuthProvider = ({ children }) => {
       throw new Error("logout gagal");
     }
 
-    dispatch({
-      type: "LOGGED_OUT",
-      payload: {
-        isLoggedIn: false,
-      },
-    });
+    // dispatch({
+    //   type: "LOGGED_OUT",
+    //   payload: {
+    //     isLoggedIn: false,
+    //     // loading: state.loading,
+    //   },
+    // });
+    navigate("/login");
   }
 
   const value = {
-    isLoggedIn: state.isLoggedIn,
+    // isLoggedIn: state.isLoggedIn,
+    // loading: state.loading,
     setLoggedIn,
     setLoggedOut,
   };

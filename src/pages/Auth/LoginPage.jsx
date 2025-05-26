@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/AuthContext";
+// import { useAuth } from "../../context/AuthContext";
 import { Button, Label, TextInput, Alert } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, setLoggedIn } = useAuth();
+  // const { setLoggedIn } = useAuth();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -14,13 +14,18 @@ const LoginPage = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      setTimeout(() => {
-        navigate("/");
-      }, 200); // redirect setelah 2 detik
-    }
-  }, [isLoggedIn]);
+  // useEffect(() => {
+  //   const getStatusLogin = async () => {
+  //     console.log(isLoggedIn);
+  //     if (isLoggedIn) {
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 200); // redirect setelah 2 detik
+  //     }
+  //   };
+
+  //   getStatusLogin();
+  // }, [isLoggedIn]);
 
   const login = async () => {
     setIsLoading(true);
@@ -31,7 +36,28 @@ const LoginPage = () => {
     }
 
     try {
-      await setLoggedIn(username, password); // ini ngecek valid atau tidak
+      const res = await fetch("/api/Api/Auth/Login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await res.json();
+      if (data.ok) {
+        console.log("Login berhasil");
+        // sendEmail();
+      } else {
+        throw new Error("Login gagal");
+      }
+
+      setTimeout(() => {
+        setLoggedOut();
+        alert("Sesi anda telah habis, silahkan login kembali");
+      }, 1800000);
+
+      navigate("/");
+      // await setLoggedIn(username, password); // ini ngecek valid atau tidak
       setError(""); // bersihin error kalau sebelumnya ada
     } catch (err) {
       setError("Username atau password salah.");

@@ -4,13 +4,27 @@ import {
   GaugeValueArc,
   GaugeReferenceArc,
 } from "@mui/x-charts/Gauge";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { allChannels } from "../../data/data";
 import { ArrowLeftIcon, Button } from "flowbite-react";
 import GaugePointer from "../../components/GaugePointer";
 import LoadingIcon from "../../components/LoadingIcon";
+// import { useAuth } from "../../context/AuthContext";
 
 const ChannelPage = () => {
+  // const { setLoggedOut } = useAuth();
+
+  // if (loading)
+  //   return (
+  //     <div className="my-[35vh] text-black">
+  //       <LoadingIcon />
+  //     </div>
+  //   );
+
+  // if (!isLoggedIn) {
+  //   return <Navigate to="/login" />;
+  // }
+
   const navigate = useNavigate();
   const { id } = useParams(); // get product id from  url
   const channelDetail = allChannels.find(
@@ -31,6 +45,12 @@ const ChannelPage = () => {
               credentials: "include",
             }
           );
+
+          if (res.status == 401) {
+            navigate("/login");
+            return;
+          }
+
           const data = await res.json(); // tunggu JSON-nya
           setChannel(data.data[0].val);
         } catch (err) {
@@ -85,6 +105,11 @@ const ChannelPage = () => {
           cmdVal: channel,
         }),
       });
+
+      if (res.status == 401) {
+        navigate("/login");
+        return;
+      }
 
       const data = await res.json();
       if (data.ok) {

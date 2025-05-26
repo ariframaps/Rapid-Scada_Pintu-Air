@@ -4,12 +4,26 @@ import { allChannels, channelNumbers } from "../../data/data";
 import { Button, ButtonGroup } from "flowbite-react";
 import ConfirmModal from "../../components/ConfirmModal";
 import LoadingIcon from "../../components/LoadingIcon";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+// import { useAuth } from "../../context/AuthContext";
 
 const HomePage = () => {
-  const navigate = useNavigate();
   const [channelsData, setChannelsData] = useState();
   const prevDataRef = useRef();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
+  // const { setLoggedOut } = useAuth();
+
+  // if (loading)
+  //   return (
+  //     <div className="my-[35vh] text-black">
+  //       <LoadingIcon />
+  //     </div>
+  //   );
+
+  // if (!isLoggedIn) {
+  //   return <Navigate to="/login" />;
+  // }
 
   const [openAll, setOpenAll] = useState(false);
   const [closeAll, setCloseAll] = useState(false);
@@ -32,6 +46,11 @@ const HomePage = () => {
             credentials: "include",
           }
         );
+
+        if (res.status == 401) {
+          navigate("/login");
+        }
+
         const data = await res.json(); // tunggu JSON-nya
 
         // 🔍 Bandingin dengan data sebelumnya
@@ -63,6 +82,9 @@ const HomePage = () => {
         // lagi proses open/close, jangan fetch
         return;
       }
+      // if (!isLoggedIn) {
+      //   setLoggedOut();
+      // }
 
       fetchData(); // polling
     }, 3000);
@@ -76,6 +98,7 @@ const HomePage = () => {
   }, [openAll, closeAll]);
 
   function openAllFunction() {
+    setIsSubmitting(true);
     const interval = setInterval(() => {
       if (!openAllRef.current) clearInterval(interval);
 
@@ -104,6 +127,7 @@ const HomePage = () => {
   }
 
   function closeAllFunction() {
+    setIsSubmitting(true);
     const interval = setInterval(() => {
       if (!closeAllRef.current) clearInterval(interval);
 
@@ -144,11 +168,17 @@ const HomePage = () => {
           }),
         });
 
+        if (res.status == 401) {
+          navigate("/login");
+          return;
+        }
+
         const data = await res.json();
         if (data.ok) {
           console.log(`Berhasil menyimpan perubahan`);
         }
       }
+      setIsSubmitting(false);
     } catch (err) {
       setChannelsData(null);
       alert(`Gagal menyimpan perubahan`);
@@ -212,7 +242,7 @@ const HomePage = () => {
       <ul className="w-full grid place-items-center 2xl:grid-cols-3 xl:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-7">
         {channelsData.map((item, index) => (
           <ChannelPreview
-            disabled={openAll || closeAll}
+            disabled={openAll || closeAll || isSubmitting}
             key={item.cnlNum}
             data={item}
             // prevData={prevChannelsData && prevChannelsData[index]}
