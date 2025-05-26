@@ -4,26 +4,13 @@ import { allChannels, channelNumbers } from "../../data/data";
 import { Button, ButtonGroup } from "flowbite-react";
 import ConfirmModal from "../../components/ConfirmModal";
 import LoadingIcon from "../../components/LoadingIcon";
-import { Navigate, useNavigate } from "react-router-dom";
-// import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const [channelsData, setChannelsData] = useState();
   const prevDataRef = useRef();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
-  // const { setLoggedOut } = useAuth();
-
-  // if (loading)
-  //   return (
-  //     <div className="my-[35vh] text-black">
-  //       <LoadingIcon />
-  //     </div>
-  //   );
-
-  // if (!isLoggedIn) {
-  //   return <Navigate to="/login" />;
-  // }
 
   const [openAll, setOpenAll] = useState(false);
   const [closeAll, setCloseAll] = useState(false);
@@ -47,6 +34,8 @@ const HomePage = () => {
           }
         );
 
+        console.log(res);
+
         if (res.status == 401) {
           navigate("/login");
         }
@@ -55,7 +44,6 @@ const HomePage = () => {
 
         // 🔍 Bandingin dengan data sebelumnya
         const prevData = prevDataRef.current;
-        // console.log(prevData);
         if (prevData) {
           data.data.forEach((ch, i) => {
             const prev = prevData[i];
@@ -69,7 +57,6 @@ const HomePage = () => {
 
         // 💾 Simpan data sekarang ke ref
         prevDataRef.current = data.data;
-
         setChannelsData(data.data);
       } catch (err) {
         setChannelsData(null);
@@ -78,14 +65,7 @@ const HomePage = () => {
     };
 
     const interval = setInterval(() => {
-      if (openAll || closeAll) {
-        // lagi proses open/close, jangan fetch
-        return;
-      }
-      // if (!isLoggedIn) {
-      //   setLoggedOut();
-      // }
-
+      if (openAll || closeAll) return; // lagi proses open/close, jangan fetch
       fetchData(); // polling
     }, 3000);
 
