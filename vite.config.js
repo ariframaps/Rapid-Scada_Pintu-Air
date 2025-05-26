@@ -14,6 +14,6 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/api/, ""), // hapus '/api' biar path asli dipake
       },
     },
-    allowedHosts: ["https://rapid-scadapintu-air-production.up.railway.app/"],
+    allowedHosts: ["rapid-scadapintu-air-production.up.railway.app"],
   },
 });
