@@ -28,7 +28,9 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          `/api/Api/Main/GetCurData?cnlNums=${channelNumbers.join(",")}`,
+          `${
+            import.meta.env.VITE_TARGET_API
+          }/Api/Main/GetCurData?cnlNums=${channelNumbers.join(",")}`,
           {
             credentials: "include",
           }
@@ -138,15 +140,18 @@ const HomePage = () => {
   async function sendAllChannels() {
     try {
       for (const ch of bufferRef.current) {
-        const res = await fetch("/api/Api/Main/SendCommand", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({
-            cnlNum: ch.cnlNum, // atau ch.cnlNum
-            cmdVal: ch.val,
-          }),
-        });
+        const res = await fetch(
+          `${import.meta.env.VITE_TARGET_API}/Api/Main/SendCommand`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              cnlNum: ch.cnlNum, // atau ch.cnlNum
+              cmdVal: ch.val,
+            }),
+          }
+        );
 
         if (res.status == 401) {
           navigate("/login");

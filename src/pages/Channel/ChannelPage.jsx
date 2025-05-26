@@ -40,7 +40,9 @@ const ChannelPage = () => {
       if (channelDetail) {
         try {
           const res = await fetch(
-            `/api/Api/Main/GetCurData?cnlNums=${channelDetail.channelNumber}`,
+            `${import.meta.env.VITE_TARGET_API}/Api/Main/GetCurData?cnlNums=${
+              channelDetail.channelNumber
+            }`,
             {
               credentials: "include",
             }
@@ -96,15 +98,18 @@ const ChannelPage = () => {
     setIsValChanging(false);
 
     try {
-      const res = await fetch("/api/Api/Main/SendCommand", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          cnlNum: channelDetail.channelNumber,
-          cmdVal: channel,
-        }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_TARGET_API}/Api/Main/SendCommand`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({
+            cnlNum: channelDetail.channelNumber,
+            cmdVal: channel,
+          }),
+        }
+      );
 
       if (res.status == 401) {
         navigate("/login");

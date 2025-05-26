@@ -7,21 +7,22 @@ import {
   NavbarCollapse,
   NavbarToggle,
 } from "flowbite-react";
-// import { useAuth } from "../context/AuthContext";
 import logo from "../assets/logo.png";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const NavBar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  // const { setLoggedOut, isLoggedIn } = useAuth();
 
   const logout = async () => {
-    const res = await fetch("/api/Api/Auth/Logout", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    });
+    const res = await fetch(
+      `${import.meta.env.VITE_TARGET_API}/Api/Auth/Logout`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+      }
+    );
 
     const data = await res.json();
     if (data.ok) {
@@ -41,17 +42,6 @@ const NavBar = () => {
           Valve
         </span>
       </NavbarBrand>
-      {/* <div className="flex order-2 sm:px-3"> */}
-      {/* {location.pathname !== "/login" && (
-        <Button
-          onClick={logout}
-          size="sm"
-          className="text-xs border-blue-300 text-blue-700"
-          color={"alternative"}>
-          Logout
-        </Button>
-      )} */}
-      {/* </div> */}
       {location.pathname !== "/login" && <NavbarToggle />}
       {location.pathname !== "/login" && (
         <NavbarCollapse className="gap-2">

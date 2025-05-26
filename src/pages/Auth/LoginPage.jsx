@@ -1,31 +1,16 @@
-import React, { useEffect, useState } from "react";
-// import { useAuth } from "../../context/AuthContext";
+import { useState } from "react";
 import { Button, Label, TextInput, Alert } from "flowbite-react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../components/Loading";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  // const { setLoggedIn } = useAuth();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const getStatusLogin = async () => {
-  //     console.log(isLoggedIn);
-  //     if (isLoggedIn) {
-  //       setTimeout(() => {
-  //         navigate("/");
-  //       }, 200); // redirect setelah 2 detik
-  //     }
-  //   };
-
-  //   getStatusLogin();
-  // }, [isLoggedIn]);
 
   const login = async () => {
     setIsLoading(true);
@@ -36,12 +21,15 @@ const LoginPage = () => {
     }
 
     try {
-      const res = await fetch("/api/Api/Auth/Login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ username, password }),
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_TARGET_API}/Api/Auth/Login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username, password }),
+        }
+      );
 
       const data = await res.json();
       if (data.ok) {
@@ -57,7 +45,6 @@ const LoginPage = () => {
       }, 1800000);
 
       navigate("/");
-      // await setLoggedIn(username, password); // ini ngecek valid atau tidak
       setError(""); // bersihin error kalau sebelumnya ada
     } catch (err) {
       setError("Username atau password salah.");
