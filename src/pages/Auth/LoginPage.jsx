@@ -21,15 +21,12 @@ const LoginPage = () => {
     }
 
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_TARGET_API}/Api/Auth/Login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ username, password }),
-        }
-      );
+      const res = await fetch(`/api/Api/Auth/Login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username, password }),
+      });
 
       const data = await res.json();
       if (data.ok) {

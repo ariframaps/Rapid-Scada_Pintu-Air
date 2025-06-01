@@ -7,13 +7,20 @@ import flowbiteReact from "flowbite-react/plugin/vite";
 export default defineConfig({
   plugins: [react(), tailwindcss(), flowbiteReact()],
   server: {
+    port: 5173,
+    strictPort: true,
+    host: true,
+    origin: "http://0.0.0.0:5173",
+    watch: {
+      usePolling: true,
+    },
     proxy: {
       "/api": {
-        target: "http://3.25.86.92", // arahkan ke Rapid SCADA
+        target: "http://localhost:10008", // arahkan ke Rapid SCADA
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ""), // hapus '/api' biar path asli dipake
       },
     },
-    allowedHosts: ["rapid-scadapintu-air-production.up.railway.app"],
+    // allowedHosts: ["rapid-scadapintu-air-production.up.railway.app"],
   },
 });
